@@ -101,7 +101,7 @@ function App() {
       addedHours = Math.floor((interval*i)/60);
       addedMinutes = interval*i - addedHours*60;
       newHours = d1Hours + addedHours;
-      newMinutes = d1Minutes + addedMinutes;
+      newMinutes = Math.floor(d1Minutes + addedMinutes);
       newHoursString = String(newHours);
       newMinutesString = String(newMinutes);
 
@@ -163,20 +163,33 @@ function App() {
         <button onClick={() => switchTheme()}><p>Switch Theme</p></button>
         </nav>
       <section id="center">
+        <h1>SmokeTrack</h1>
+        <p>
+          A tracker for smokers trying to quit.
+        </p>
+        <div className='spacerDiv'></div>
         <div className="hero">
-          <h1>SmokeTrack</h1>
-          <p>
-            A tracker for smokers trying to quit.
-          </p>
+          <div>
+            <h2>Cigarettes smoked today</h2>
+            <button 
+              type="button"
+              className="counter"
+              onClick={() => setCount((count) => count + 1)}
+            >
+            {count}
+            </button>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Cigarettes smoked today: {count}
-        </button>
+
+        <div>
+          <h2>Time to next smoke</h2>
+          <button className='counter' id="timeToNextSmoke">{timeToNextSmoke}</button>
+        </div>
+        </div>
       </section>
+
+      <div className="spacerDiv">
+        
+      </div>
 
       <div className="ticks"></div>
 
@@ -227,10 +240,7 @@ function App() {
         </div>
       </section>
 
-      <section id="center">
-        <h2>Time to next smoke:</h2>
-        <button className='counter' id="timeToNextSmoke">{timeToNextSmoke}</button>
-      </section>
+      
 
       <section id='spacer'></section>
 
