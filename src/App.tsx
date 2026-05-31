@@ -178,18 +178,18 @@ function App() {
             >
             {count}
             </button>
-        </div>
+            <div className='spacerDiv'></div>
 
-        <div>
-          <h2>Time to next smoke</h2>
-          <button className='counter' id="timeToNextSmoke">{timeToNextSmoke}</button>
-        </div>
+          </div>
+
+          <div>
+            <h2>Time to next smoke</h2>
+            <button className='counter' id="timeToNextSmoke">{timeToNextSmoke}</button>
+            <div className='spacerDiv'></div>
+
+          </div>`
         </div>
       </section>
-
-      <div className="spacerDiv">
-        
-      </div>
 
       <div className="ticks"></div>
 
