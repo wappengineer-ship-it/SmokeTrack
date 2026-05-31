@@ -15,12 +15,14 @@ function App() {
     localStorage.setItem('count', JSON.stringify(count));
   }, [count])
 
-  const [className, setClassName] = useState<string>("theme-dark");
   return (
     <>
       <nav>
-        <button onClick={() => switchTheme()}><p>Switch Theme</p></button>
-        </nav>
+        <div className="box theme-light">Ligth Theme</div>
+        <br />
+
+        <div className="box theme-dark">Dark Theme</div>
+      </nav>
       <section id="center">
         <div className="hero">
           <h1>SmokeTrack</h1>
@@ -57,29 +59,26 @@ function App() {
       <section id="spacer"></section>
     </>
   )
-}//identify the toggle switch HTML element
-
-//function that changes the theme, and sets a localStorage variable to track the theme between page loads
-function switchTheme() {
-  let theme = localStorage.getItem('theme');
-
-  if (theme === 'dark' || !theme){
-    localStorage.setItem('theme', 'light');
-
-  } else {
-    localStorage.setItem('theme', 'dark');
-  }
-   
-  setTheme();
 }
-function setTheme () {
+
+function setTheme(themeName, setClassName) {
+    localStorage.setItem('theme', themeName);
+    setClassName(themeName);
+}
+
+function keepTheme(setClassName) {
   const theme = localStorage.getItem('theme');
-  if (theme === 'light'){
-    document.documentElement.setAttribute('data-theme', 'light');
-  } else {
-    document.documentElement.setAttribute('data-theme', 'dark');
+  if (theme) {
+    setTheme(theme, setClassName);
+    return;
   }
-}
-setTheme();
 
+  const prefersLightTheme = window.matchMedia('(prefers-color-scheme: light)');
+  if (prefersLightTheme.matches) {
+    setTheme('theme-light', setClassName);
+    return;
+  }
+
+  setTheme('theme-dark', setClassName);
+}
 export default App
