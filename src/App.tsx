@@ -82,9 +82,8 @@ function App() {
     const d1Minutes: number = d1.getMinutes();
     const d2Minutes: number = d2.getMinutes();
 
-    const totalminutes = Math.abs((d2Hours*60 + d2Minutes) - (d1Hours*60-d1Minutes));
-
-    const interval: number = totalminutes/goal;
+    const totalminutes = Math.abs((d2Hours*60 + d2Minutes) - (d1Hours*60+d1Minutes));
+    const interval: number = totalminutes/(goal-1);
     
 
     let t: string = '';
