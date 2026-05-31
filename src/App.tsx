@@ -15,7 +15,7 @@ function App() {
     localStorage.setItem('count', JSON.stringify(count));
   }, [count])
 
-  const [className, setClassName] = useState<string>("theme-dark");
+  //const [className, setClassName] = useState<string>("theme-dark");
   return (
     <>
       <nav>
