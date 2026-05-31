@@ -2,6 +2,10 @@ import { useState, useEffect } from 'react';
 import './App.css'
 
 function App() {
+  useEffect(()=>{
+    document.title = "SmokeTrack";
+  }, [])
+
   const [count, setCount] = useState<number>(()=>{
     const saved = localStorage.getItem('count');
     if (saved) {
