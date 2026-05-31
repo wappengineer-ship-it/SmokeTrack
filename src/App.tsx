@@ -64,10 +64,11 @@ function App() {
   }, [sleepTime])
 
   //SmokeTimes
-  const [smokeTimes, setSmokeTimes] = useState<string>('');
+  const [smokeTimes, setSmokeTimes] = useState<number[]>([])
+  const [smokeTimesString, setsmokeTimesString] = useState<string>('');
 
   useEffect(() => {
-    setSmokeTimes(getSmokeTimes());
+    setsmokeTimesString(getSmokeTimes());
   }, [goal, getUpTime, sleepTime])
   
   function getSmokeTimes(): string {
@@ -94,6 +95,7 @@ function App() {
     let newMinutes: number;
     let newHoursString: string;
     let newMinutesString: string;
+    let smokeTimesArray: number[] = [];
 
     for (let i = 0; i < goal; i++){
       addedHours = Math.floor((interval*i)/60);
@@ -103,21 +105,57 @@ function App() {
       newHoursString = String(newHours);
       newMinutesString = String(newMinutes);
 
-  
-
-      if (String(newMinutes).length === 1){
+      if (newMinutesString.length === 1){
         newMinutesString = newMinutes + '0';
       }
 
       t += newHoursString + ':' + newMinutesString;
+      smokeTimesArray.push(newHours*60 + newMinutes)
 
       if (i < goal - 1){
         t += ' - '
       }
       //t += new Date(d1 + interval*i).getMinutes()
     }
+    setSmokeTimes(smokeTimesArray)
     return t;
   }
+
+  //Time to next smoke
+  const [timeToNextSmoke, setTimeToNextSmoke] = useState<string>('')
+
+  setInterval(function(){
+    const now = new Date();
+    const minutes: number = now.getHours()*60 + now.getMinutes();
+
+    let TotalMinutes: number;
+    /*let HoursOfNextSmoke: number;
+    let MinutesOfNextSmoke: number;
+    let HoursOfNextSmokeString: string;
+    let MinutesOfNextSmokeString: string;*/
+    let MinutesToNextSmoke: number;
+
+    for(let i = 0; i < smokeTimes.length; i++){
+      TotalMinutes = smokeTimes[i];
+  
+      if (TotalMinutes > minutes){
+        /*
+        HoursOfNextSmoke = Math.floor((TotalMinutes)/60);
+        MinutesOfNextSmoke = TotalMinutes - HoursOfNextSmoke*60;
+        HoursOfNextSmokeString = String(HoursOfNextSmoke);
+        MinutesOfNextSmokeString = String(MinutesOfNextSmoke);
+
+        if (MinutesOfNextSmokeString.length === 1){
+          MinutesOfNextSmokeString = MinutesOfNextSmokeString + '0';
+        }
+        */
+
+        MinutesToNextSmoke = TotalMinutes - minutes
+        setTimeToNextSmoke(String(MinutesToNextSmoke) + 'min')
+        break
+      }
+    }
+  }, 1000)
 
   return (
     <>
@@ -157,33 +195,45 @@ function App() {
         </div>
         <div id="smokeSpacing">
           <h2>Smoke spacing</h2>
-          <p>Space   smokes out each day for your goal.</p>
-          <form>
-            <label htmlFor="getUpInput">What time did you get up?</label>
-            <input 
-              id="getUpInput" 
-              type="time"
-              onChange={(e:any)=>setGetUpTime(e.target.value)}
-              value={getUpTime}
-            />
-            <br/>
-            <label htmlFor="sleepInput">What time will you go to bed?</label>
-            <input 
-              id="sleepInput" 
-              type="time"
-              onChange={(e:any)=>setSleepTime(e.target.value)}
-              value={sleepTime}
+          <div id='smokeSpacingDiv'>
+            <h3>Space   smokes out each day for your goal.</h3>
+            <form id="smokeSpacingForm">
+              <label htmlFor="getUpInput">What time did you get up?</label>
+              <input 
+                id="getUpInput" 
+                type="time"
+                onChange={(e:any)=>setGetUpTime(e.target.value)}
+                value={getUpTime}
+              />
+              <br/>
+              <label htmlFor="sleepInput">What time will you go to bed?</label>
+              <input 
+                id="sleepInput" 
+                type="time"
+                onChange={(e:any)=>setSleepTime(e.target.value)}
+                value={sleepTime}
 
-            />
-          </form>
+              />
+            </form>
 
-          <div>Smoke times: {smokeTimes}
+            <div>
+              <h4>Smoke times:</h4>
+              <p>{smokeTimesString}</p> 
+            </div>
+          </div>
+          <div>
+
           </div>
         </div>
       </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+      <section id="center">
+        <h2>Time to next smoke:</h2>
+        <button className='counter' id="timeToNextSmoke">{timeToNextSmoke}</button>
+      </section>
+
+      <section id='spacer'></section>
+
     </>
   )
 }//identify the toggle switch HTML element

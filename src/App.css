@@ -40,6 +40,8 @@
 }
 
 #center {
+  padding: 20px;
+  border-top: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   gap: 25px;
@@ -53,59 +55,6 @@
   }
 }
 
-#goalSection {
-  display: flex;
-  border-top: 1px solid var(--border);
-  text-align: left;
-
-  & > div {
-    flex: 1 1 0;
-    padding: 32px;
-    @media (max-width: 1024px) {
-      padding: 24px 20px;
-    }
-  }
-
-  .icon {
-    margin-bottom: 16px;
-    width: 22px;
-    height: 22px;
-  }
-
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    text-align: center;
-  }
-}
-
-#goalDiv {
-  
-  border-right: 1px solid var(--border);
-
-  @media (max-width: 1024px) {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
-
-}
-
-#goalDiv form {
-  display: grid;
-  grid-template-columns: 5fr 1fr;
-  gap: 10px;
-  place-items: center;
-}
-
-#goalInput {
-  text-align: right;
-  font-size: 1rem;
-  height: 2rem;
-  width: 100%;
-}
-
-#goalInput:focus {
-  border: 2px solid var(--accent);
-}
 
 #next-steps ul {
   list-style: none;
@@ -186,7 +135,72 @@
   }
 }
 
+#goalSection {
+  display: flex;
+  border-top: 1px solid var(--border);
+  text-align: left;
+
+  & > div {
+    flex: 1 1 0;
+    padding: 32px;
+    @media (max-width: 1024px) {
+      padding: 24px 20px;
+    }
+  }
+
+  .icon {
+    margin-bottom: 16px;
+    width: 22px;
+    height: 22px;
+  }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+#goalDiv {
+  
+  border-right: 1px solid var(--border);
+
+  @media (max-width: 1024px) {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+}
+
+#goalDiv form {
+  display: grid;
+  grid-template-columns: 5fr 1fr;
+  gap: 10px;
+  place-items: center;
+  margin: 0;
+}
+
+#goalInput {
+  text-align: right;
+  font-size: 1rem;
+  height: 2rem;
+  width: 50px;
+}
+
+#goalInput:focus {
+  border: 2px solid var(--accent);
+}
+
+
 #getUpInput, #sleepInput{
   display: inline-flex;
   margin: 10px;
+  width: 70px;
+}
+
+#smokeSpacingDiv {
+  text-align: center;
+}
+
+#timeToNextSmoke {
+  font-size: 50px;
 }
