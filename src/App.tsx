@@ -122,41 +122,45 @@ function App() {
   }
 
   //Time to next smoke
-  const [timeToNextSmoke, setTimeToNextSmoke] = useState<string>('')
+  const [timeToNextSmoke, setTimeToNextSmoke] = useState<string>('');
 
-  setInterval(function(){
-    const now = new Date();
-    const minutes: number = now.getHours()*60 + now.getMinutes();
+  useEffect(() => {
+    const interval = setInterval(function(){
+      const now = new Date();
+      const minutes: number = now.getHours()*60 + now.getMinutes();
 
-    let TotalMinutes: number;
-    /*let HoursOfNextSmoke: number;
-    let MinutesOfNextSmoke: number;
-    let HoursOfNextSmokeString: string;
-    let MinutesOfNextSmokeString: string;*/
-    let MinutesToNextSmoke: number;
+      let TotalMinutes: number;
+      /*let HoursOfNextSmoke: number;
+      let MinutesOfNextSmoke: number;
+      let HoursOfNextSmokeString: string;
+      let MinutesOfNextSmokeString: string;*/
+      let MinutesToNextSmoke: number;
 
-    for(let i = 0; i < smokeTimes.length; i++){
-      TotalMinutes = smokeTimes[i];
-  
-      if (TotalMinutes > minutes){
-        /*
-        HoursOfNextSmoke = Math.floor((TotalMinutes)/60);
-        MinutesOfNextSmoke = TotalMinutes - HoursOfNextSmoke*60;
-        HoursOfNextSmokeString = String(HoursOfNextSmoke);
-        MinutesOfNextSmokeString = String(MinutesOfNextSmoke);
+      for(let i = 0; i < smokeTimes.length; i++){
+        TotalMinutes = smokeTimes[i];
+    
+        if (TotalMinutes > minutes){
+          /*
+          HoursOfNextSmoke = Math.floor((TotalMinutes)/60);
+          MinutesOfNextSmoke = TotalMinutes - HoursOfNextSmoke*60;
+          HoursOfNextSmokeString = String(HoursOfNextSmoke);
+          MinutesOfNextSmokeString = String(MinutesOfNextSmoke);
 
-        if (MinutesOfNextSmokeString.length === 1){
-          MinutesOfNextSmokeString = MinutesOfNextSmokeString + '0';
+          if (MinutesOfNextSmokeString.length === 1){
+            MinutesOfNextSmokeString = MinutesOfNextSmokeString + '0';
+          }
+          */
+
+          MinutesToNextSmoke = TotalMinutes - minutes
+          setTimeToNextSmoke(String(MinutesToNextSmoke) + 'min')
+          break
         }
-        */
-
-        MinutesToNextSmoke = TotalMinutes - minutes
-        setTimeToNextSmoke(String(MinutesToNextSmoke) + 'min')
-        break
       }
-    }
-  }, 1000)
-
+    }, 1000)
+    //setSmokeInterval(Interval);
+      return () => clearInterval(interval);
+  })
+  
   return (
     <>
       <nav>
@@ -178,6 +182,13 @@ function App() {
             >
             {count}
             </button>
+            <button 
+              type="button"
+              className="counter"
+              onClick={() => setCount(0)}
+            >
+            ↺
+            </button>
             <div className='spacerDiv'></div>
 
           </div>
@@ -187,7 +198,7 @@ function App() {
             <button className='counter' id="timeToNextSmoke">{timeToNextSmoke}</button>
             <div className='spacerDiv'></div>
 
-          </div>`
+          </div>
         </div>
       </section>
 
