@@ -72,7 +72,7 @@ function App() {
   }, [goal, getUpTime, sleepTime])
   
   function getSmokeTimes(): string {
-    if (!getUpTime || !sleepTime){
+    if (!getUpTime || !sleepTime || !goal){
       return '';
     }
     var d1 = new Date('2026-05-31:' + getUpTime + '.000') //Any date for now
@@ -115,7 +115,6 @@ function App() {
       if (i < goal - 1){
         t += ' - '
       }
-      //t += new Date(d1 + interval*i).getMinutes()
     }
     setSmokeTimes(smokeTimesArray)
     return t;
@@ -130,42 +129,78 @@ function App() {
       const minutes: number = now.getHours()*60 + now.getMinutes();
 
       let TotalMinutes: number;
-      /*let HoursOfNextSmoke: number;
-      let MinutesOfNextSmoke: number;
-      let HoursOfNextSmokeString: string;
-      let MinutesOfNextSmokeString: string;*/
+     
       let MinutesToNextSmoke: number;
 
       for(let i = 0; i < smokeTimes.length; i++){
         TotalMinutes = smokeTimes[i];
     
         if (TotalMinutes > minutes){
-          /*
-          HoursOfNextSmoke = Math.floor((TotalMinutes)/60);
-          MinutesOfNextSmoke = TotalMinutes - HoursOfNextSmoke*60;
-          HoursOfNextSmokeString = String(HoursOfNextSmoke);
-          MinutesOfNextSmokeString = String(MinutesOfNextSmoke);
-
-          if (MinutesOfNextSmokeString.length === 1){
-            MinutesOfNextSmokeString = MinutesOfNextSmokeString + '0';
-          }
-          */
-
           MinutesToNextSmoke = TotalMinutes - minutes
           setTimeToNextSmoke(String(MinutesToNextSmoke) + 'min')
           break
         }
       }
     }, 1000)
-    //setSmokeInterval(Interval);
       return () => clearInterval(interval);
   })
+
+  //Time resisted 
+  const [lastSmoke, setLastSmoke] = useState<string>(() => {
+    const saved = localStorage.getItem('lastSmoke');
+    if (saved) {
+      return JSON.parse(saved);
+    } else {
+      const D = new Date();
+      return String(D.getHours()) + ':' + String(D.getMinutes());
+    }
+  });
+
+  useEffect(() => {
+    const D = new Date();
+    setLastSmoke(String(D.getHours()) + ':' + String(D.getMinutes()));
+    localStorage.setItem('lastSmoke', JSON.stringify(lastSmoke));
+  }, [count])
+
+  //Time resisted
+  const [timeResisted, setTimeResisted] = useState<string>('0h:00');
+
+  useEffect(() => {
+    const interval = setInterval(function(){
+      const now = new Date();
+      const nowH = now.getHours();
+      const nowM = now.getMinutes()
+      const minutesNow: number = nowH*60 + nowM;
+
+      const lastH = parseInt(lastSmoke.split(':')[0]);
+      const lastM = parseInt(lastSmoke.split(':')[1]);
+      const totalMinutesOfLast = lastH*60 + lastM;
+
+      const minutesToLast = minutesNow - totalMinutesOfLast;
+
+      const resistedH = Math.floor(minutesToLast/60);
+      const resistedM = minutesToLast - resistedH*60;
+
+      const resistedH_str = String(resistedH);
+      let resistedM_str = String(resistedM);
+
+      if (resistedM_str.length === 1){
+        resistedM_str = "0" + resistedM_str;
+      }
+
+
+      setTimeResisted(resistedH_str + 'h' + resistedM_str)
+
+    }, 1000)
+      return () => clearInterval(interval);
+  })
+
   
   return (
     <>
       <nav>
         <button onClick={() => switchTheme()}><p>Switch Theme</p></button>
-        </nav>
+      </nav>
       <section id="center">
         <h1>SmokeTrack</h1>
         <p>
@@ -196,13 +231,15 @@ function App() {
           <div>
             <h2>Time to next smoke</h2>
             <button className='counter' id="timeToNextSmoke">{timeToNextSmoke}</button>
+
+            <h2>Time resisted</h2>
+            <button className='counter' id="timeToNextSmoke">{timeResisted}</button>
+            
             <div className='spacerDiv'></div>
 
           </div>
         </div>
       </section>
-
-      <div className="ticks"></div>
 
       <section id="goalSection">
         <div id="goalDiv">
@@ -220,7 +257,7 @@ function App() {
         <div id="smokeSpacing">
           <h2>Smoke spacing</h2>
           <div id='smokeSpacingDiv'>
-            <h3>Space   smokes out each day for your goal.</h3>
+            <h3>Space smokes out each day for your goal.</h3>
             <form id="smokeSpacingForm">
               <label htmlFor="getUpInput">What time did you get up?</label>
               <input 
@@ -245,19 +282,13 @@ function App() {
               <p>{smokeTimesString}</p> 
             </div>
           </div>
-          <div>
-
-          </div>
         </div>
       </section>
-
-      
-
       <section id='spacer'></section>
 
     </>
   )
-}//identify the toggle switch HTML element
+}
 
 //function that changes the theme, and sets a localStorage variable to track the theme between page loads
 function switchTheme() {
